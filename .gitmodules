@@ -1,0 +1,3 @@
+[submodule "deps/db-utils"]
+	path = deps/db-utils
+	url = https://github.com/briankeane/pl-db-utils-node.git
