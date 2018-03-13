@@ -6,6 +6,6 @@ router.get('/', (req, res) => {
 })
 
 router.use('/hello', require('./subroutes/hello'))
-router.use('/matches', require('./subroutes/matches'))
+router.use('/songRequests', require('./subroutes/songRequests'))
 
 module.exports = router

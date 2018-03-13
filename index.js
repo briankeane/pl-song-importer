@@ -4,6 +4,19 @@ const bodyParser = require('body-parser')
 const services = require('./lib/services')
 const handlers = require('./lib/handlers')
 const events = require('./lib/events')
+const mongoose = require('mongoose')
+const Q = require('q')
+
+
+// Connect to MongoDB
+mongoose.Promise = Q.Promise;
+
+mongoose.connect(process.env.MONGO_DB_URI, { autoReconnect: true });
+mongoose.connection.on('error', function(err) {
+  console.error(`MongoDB connection error: ${err}`);
+  process.exit(-1); // eslint-disable-line no-process-exit
+});
+
 
 app.all('*', function(req, res, next) {
   res.header('Access-Control-Allow-Credentials', true)
@@ -37,16 +50,16 @@ app.listen(app.get('port'), () => {
    * to connect to. When all these connections have been made we are safe to publish and
    * subscribe to events from each stream.
    */
-  services.connect().then(() => {
+  // services.connect().then(() => {
 
-    /**
-     * We can call each service by its name and subscribe or publish directly to that service's
-     * message queue. We define the event names in the `events.js` file. Similarly, we also
-     * move the processing of the event to a file called `handlers.js`.
-     */
-    services.example.subscribe(
-      events.EXAMPLE_SANITY,
-      handlers.onExampleSanity
-    )
-  }).catch(error => console.log(error))
+  //   *
+  //    * We can call each service by its name and subscribe or publish directly to that service's
+  //    * message queue. We define the event names in the `events.js` file. Similarly, we also
+  //    * move the processing of the event to a file called `handlers.js`.
+     
+  //   services.example.subscribe(
+  //     events.EXAMPLE_SANITY,
+  //     handlers.onExampleSanity
+  //   )
+  // }).catch(error => console.log(error))
 })
