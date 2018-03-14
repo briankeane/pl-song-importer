@@ -42,7 +42,6 @@ function initiateAcquisition(req, res, next) {
 
   spotify.getSongWithID(req.params.spotifyID)
     .then(spotifyInfo => {
-      console.log('spotifyInfo', spotifyInfo)
       // mark process as started in db
       db.createSongRequest({ spotify_info: spotifyInfo, status: status.PROCESSING })
         .then(createdSongRequest => {
