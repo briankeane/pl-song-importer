@@ -63,6 +63,8 @@ function initiateAcquisition(req, res, next) {
 }
 
 function checkBucket(req, res, next) {
+  console.log('req.body.bucketName', req.body.bucketName)
+  console.log('process.en.SONGS_BUCKET_NAME', process.env.SONGS_BUCKET_NAME)
   if (req.body.bucketName !== process.env.SONGS_BUCKET_NAME) {
     return res.status(400).json({ message: errors.INVALID_BUCKET_NAME })
   }
