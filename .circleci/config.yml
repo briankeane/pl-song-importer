@@ -45,5 +45,5 @@ jobs:
       - postgresql
 
 database:
- override:
-   - npm run migrations
+  override:
+    - npm run migrations
