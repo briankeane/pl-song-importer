@@ -25,13 +25,9 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
-      - run: 
-        name: install dependencies
-        command: npm install
+      - run: npm install
 
-      - run:
-        name: setup database
-        command: npm run  migrations
+      - run: npm run migrations
 
       - save_cache:
         paths:
@@ -45,5 +41,5 @@ jobs:
       - postgresql
 
 database:
- override:
-   - npm run migrations
+  override:
+    - npm run migrations
