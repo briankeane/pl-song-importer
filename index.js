@@ -11,7 +11,7 @@ const Q = require('q')
 // Connect to MongoDB
 mongoose.Promise = Q.Promise;
 
-mongoose.connect(process.env.MONGO_DB_URI, { autoReconnect: true });
+mongoose.connect(process.env.MONGODB_URI, { autoReconnect: true });
 mongoose.connection.on('error', function(err) {
   console.error(`MongoDB connection error: ${err}`);
   process.exit(-1); // eslint-disable-line no-process-exit
