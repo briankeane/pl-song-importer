@@ -17,30 +17,31 @@ jobs:
 
     steps:
       - checkout
+      - run: echo "hello"
 
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+            - pl-song-service-npm-deps-{{ .Branch }}-{{ checksum "package.json" }}
+            - pl-song-service-npm-deps-{{ .Branch }}
+            - pl-song-service-npm-deps-
 
-      - run: npm install
+#       - run: npm install
 
-      - run: npm run migrations
+#       - run: npm run migrations
 
-      - save_cache:
-        paths:
-          - node_modules
-        key: v1-dependencies-{{ checksum "package.json" }}
+#       - save_cache:
+#         paths:
+#           - node_modules
+#         key: v1-dependencies-{{ checksum "package.json" }}
         
-      # run tests!
-      - run: npm test
+#       # run tests!
+#       - run: npm test
 
-    services:
-      - postgresql
+#     services:
+#       - postgresql
 
-database:
-  override:
-    - npm run migrations
-    
+# database:
+#   override:
+    # - npm run migrations
+
