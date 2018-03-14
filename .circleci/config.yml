@@ -32,11 +32,11 @@ jobs:
       - run:
         name: setup database
         command: npm run  migrations
-        
+
       - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+        paths:
+          - node_modules
+        key: v1-dependencies-{{ checksum "package.json" }}
         
       # run tests!
       - run: npm test
