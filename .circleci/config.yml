@@ -19,7 +19,9 @@ jobs:
 
     steps:
       - checkout
-      - run: echo "hello"
+      - run: git submodule sync
+      - run: git submodule update --init
+
 
       # Download and cache dependencies
       - restore_cache:
