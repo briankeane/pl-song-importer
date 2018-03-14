@@ -12,8 +12,9 @@ const Song = require('../../../lib/mongoose/song.model')
 
 
 function checkForSong(req, res, next) {
-  Song.find({ 'spotify.id': req.params.spotifyID }, function (err, foundSongs) {
+  Song.find({ 'spotifyInfo.id': req.params.spotifyID }, function (err, foundSongs) {
     if (err) return handleError(res, err)
+    console.log('foundSongs: ', foundSongs)
     if (foundSongs.length) {
       return res.status(200).send({ song: foundSongs[0], status: status.COMPLETED })
     }
@@ -63,7 +64,7 @@ function initiateAcquisition(req, res, next) {
 }
 
 function checkBucket(req, res, next) {
-  if (req.body.bucketName !== process.env.bucketName) {
+  if (req.body.bucketName !== process.env.SONGS_BUCKET_NAME) {
     return res.status(400).json({ message: errors.INVALID_BUCKET_NAME })
   }
   next()
@@ -77,12 +78,13 @@ function completeSongAcquisition(req, res, next) {
 
   db.getSongRequestWithSpotifyID(req.params.spotifyID)
     .then(songRequest => {
-      var song = Song.newFromSpotifyInfo(songRequest.spotifyInfo)
+      var song = Song.newFromSpotifyInfo(songRequest.spotify_info)
       song.key = req.body.key
       song.save((err) => {
         if (err) return finish(err)
         db.removeSongRequestWithID(songRequest.id)
-          .then(() => finish(null, { message: status.COMPLETED }))
+          .then(() => finish(null, { status: status.COMPLETED,
+                                     song: song }))
           .catch(err => finish(err))
       })
     })
