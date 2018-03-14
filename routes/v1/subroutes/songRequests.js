@@ -14,7 +14,6 @@ const Song = require('../../../lib/mongoose/song.model')
 function checkForSong(req, res, next) {
   Song.find({ 'spotifyInfo.id': req.params.spotifyID }, function (err, foundSongs) {
     if (err) return handleError(res, err)
-    console.log('foundSongs: ', foundSongs)
     if (foundSongs.length) {
       return res.status(200).send({ song: foundSongs[0], status: status.COMPLETED })
     }
@@ -33,12 +32,10 @@ function checkForSongRequest(req, res, next) {
 }
 
 function initiateAcquisition(req, res, next) {
-  console.log('1')
   function finish(err, data) {
     if (err) return handleError(res, err)
     return res.status(200).json(data)
   }
-  console.log('2')
 
   spotify.getSongWithID(req.params.spotifyID)
     .then(spotifyInfo => {
