@@ -43,3 +43,4 @@ jobs:
 database:
   override:
     - npm run migrations
+    
