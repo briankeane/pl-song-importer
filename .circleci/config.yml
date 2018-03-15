@@ -51,7 +51,7 @@ jobs:
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               git push heroku master
-              git push heroku testing
+              git push testing master
             elif [ "${CIRCLE_BRANCH}" == "develop" ]; then
               git push staging master
             fi
