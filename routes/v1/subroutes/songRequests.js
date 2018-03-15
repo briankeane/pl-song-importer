@@ -57,6 +57,7 @@ function initiateAcquisition(req, res, next) {
         })
         .catch(err => finish(err))
     })
+    .catch(err => finish(err))
 }
 
 function checkBucket(req, res, next) {
