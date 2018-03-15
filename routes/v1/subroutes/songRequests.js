@@ -12,6 +12,7 @@ const Song = require('../../../lib/mongoose/song.model')
 
 
 function checkForSong(req, res, next) {
+  console.log('checking for song...')
   Song.find({ 'spotifyInfo.id': req.params.spotifyID }, function (err, foundSongs) {
     if (err) return handleError(res, err)
     if (foundSongs.length) {
@@ -22,6 +23,7 @@ function checkForSong(req, res, next) {
 }
 
 function checkForSongRequest(req, res, next) {
+  console.log('checking for songRequest...')
   db.getSongRequestWithSpotifyID(req.params.spotifyID)
     .then(songRequest => res.status(200).json({ status: songRequest.status }))
     .catch(err => {
@@ -37,11 +39,14 @@ function initiateAcquisition(req, res, next) {
     return res.status(200).json(data)
   }
 
+  console.log('calling spotify-interface')
   spotify.getSongWithID(req.params.spotifyID)
     .then(spotifyInfo => {
       // mark process as started in db
+      console.log('creating songRequest')
       db.createSongRequest({ spotify_info: spotifyInfo, status: status.PROCESSING })
         .then(createdSongRequest => {
+          console.log('calling youTube matching service')
           youTube.getMatches(lib.youTubeSearchDataFromSpotifyInfo(spotifyInfo))
             .then(matches => {
               if (!matches.length) {
