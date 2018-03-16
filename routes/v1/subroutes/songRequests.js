@@ -94,6 +94,13 @@ function completeSongAcquisition(req, res, next) {
     .catch(err => finish(err))
 }
 
+function getSpotifyIDs(req, res, next) {
+  Song.getSpotifyIDs()
+  .then(ids => res.status(200).json({ spotifyIDs: ids }))
+  .catch(err => res.status(500).json(err))
+}
+
+router.get('/getSpotifyIDs', getSpotifyIDs)
 router.post('/complete/:spotifyID', checkBucket, checkForSong, completeSongAcquisition)
 router.post('/:spotifyID', checkForSong, checkForSongRequest, initiateAcquisition)
 

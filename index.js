@@ -17,6 +17,7 @@ mongoose.connect(process.env.MONGODB_URI, { autoReconnect: true }, function (err
 });
 mongoose.connection.on('error', function(err) {
   console.error(`MongoDB connection error: ${err}`);
+  console.log(`connection uri: ${process.env.MONGODB_URI}`)
   process.exit(-1); // eslint-disable-line no-process-exit
 });
 
