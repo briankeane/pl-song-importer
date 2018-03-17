@@ -3,4 +3,4 @@
 	url = https://9f56d0023009303481abee7a2ef7cb99d4128ebb:x-oauth-basic@github.com/briankeane/pl-db-utils-node.git
 [submodule "deps/event-stream"]
 	path = deps/event-stream
-	url = https://github.com/briankeane/pl-event-stream-node.git
+	url = https://9f56d0023009303481abee7a2ef7cb99d4128ebb:x-oauth-basic@github.com/briankeane/pl-event-stream-node.git

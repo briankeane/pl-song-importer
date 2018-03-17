@@ -25,7 +25,7 @@ function checkForSong(req, res, next) {
 function checkForSongRequest(req, res, next) {
   console.log('checking for songRequest...')
   db.getSongRequestWithSpotifyID(req.params.spotifyID)
-    .then(songRequest => res.status(200).json({ status: songRequest.status }))
+    .then(songRequest => res.status(200).json(songRequest))
     .catch(err => {
       (err.message === errors.SONG_REQUEST_DOES_NOT_EXIST) 
       ? next() 
