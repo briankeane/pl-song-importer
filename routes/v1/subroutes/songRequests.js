@@ -39,7 +39,7 @@ function initiateAcquisition(req, res, next) {
     return res.status(200).json(data)
   }
 
-  lib.createSongRequest(spotifyID)
+  lib.createSongRequest(req.params.spotifyID)
     .then(songRequest => finish(null, songRequest))
     .catch(err => finish(err))
 
