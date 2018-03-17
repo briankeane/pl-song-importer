@@ -54,16 +54,27 @@ app.listen(app.get('port'), () => {
    * to connect to. When all these connections have been made we are safe to publish and
    * subscribe to events from each stream.
    */
-  // services.connect().then(() => {
+  services.connect().then(() => {
 
   //   *
   //    * We can call each service by its name and subscribe or publish directly to that service's
   //    * message queue. We define the event names in the `events.js` file. Similarly, we also
   //    * move the processing of the event to a file called `handlers.js`.
      
-  //   services.example.subscribe(
-  //     events.EXAMPLE_SANITY,
-  //     handlers.onExampleSanity
-  //   )
-  // }).catch(error => console.log(error))
+    services.songRequest.subscribe(
+      events. SONGS_CREATION_PIPELINE_SPOTIFYINFO_RECEIVED,
+      handlers.onSpotifyInfoReceived
+    )
+
+    services.songRequest.subscribe(
+      events. SONGS_CREATION_PIPELINE_SPOTIFYINFO_FAILED,
+      handlers.onSpotifyInfoFailed
+    )
+
+    services.songRequest.subscribe(
+      events. SONGS_CREATION_PIPELINE_YOUTUBEINFO_RECEIVED,
+      handlers.onYouTubeInfoReceived
+    )
+
+  }).catch(error => console.log(error))
 })
