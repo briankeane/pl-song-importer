@@ -39,30 +39,33 @@ function initiateAcquisition(req, res, next) {
     return res.status(200).json(data)
   }
 
-  console.log('calling spotify-interface')
-  spotify.getSongWithID(req.params.spotifyID)
-    .then(spotifyInfo => {
-      // mark process as started in db
-      console.log('creating songRequest')
-      db.createSongRequest({ spotify_info: spotifyInfo, status: status.PROCESSING })
-        .then(createdSongRequest => {
-          console.log('calling youTube matching service')
-          youTube.getMatches(lib.youTubeSearchDataFromSpotifyInfo(spotifyInfo))
-            .then(matches => {
-              if (!matches.length) {
-                db.updateSongRequestWithID(createdRequest.id, { status: status.MATCH_NOT_FOUND })
-                return finish({ status: status.MATCH_NOT_FOUND })
-              } else {
-                lib.requestAudio({ youTubeIDs: matches.map(match => match.id), spotifyID: req.params.spotifyID })
-                  .then(result => finish(null, { status: status.PROCESSING }))
-                  .catch(err => finish(err))
-              }
-            })
-            .catch(err => finish(err))
-        })
-        .catch(err => finish(err))
-    })
+  lib.createSongRequest(spotifyID)
+    .then(songRequest => finish(null, songRequest))
     .catch(err => finish(err))
+
+  // spotify.getSongWithID(req.params.spotifyID)
+  //   .then(spotifyInfo => {
+  //     // mark process as started in db
+  //     console.log('creating songRequest')
+  //     db.createSongRequest({ spotify_info: spotifyInfo, status: status.PROCESSING })
+  //       .then(createdSongRequest => {
+  //         console.log('calling youTube matching service')
+  //         youTube.getMatches(lib.youTubeSearchDataFromSpotifyInfo(spotifyInfo))
+  //           .then(matches => {
+  //             if (!matches.length) {
+  //               db.updateSongRequestWithID(createdRequest.id, { status: status.MATCH_NOT_FOUND })
+  //               return finish({ status: status.MATCH_NOT_FOUND })
+  //             } else {
+  //               lib.requestAudio({ youTubeIDs: matches.map(match => match.id), spotifyID: req.params.spotifyID })
+  //                 .then(result => finish(null, { status: status.PROCESSING }))
+  //                 .catch(err => finish(err))
+  //             }
+  //           })
+  //           .catch(err => finish(err))
+  //       })
+  //       .catch(err => finish(err))
+  //   })
+  //   .catch(err => finish(err))
 }
 
 function checkBucket(req, res, next) {
