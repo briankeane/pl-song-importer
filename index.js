@@ -62,19 +62,23 @@ app.listen(app.get('port'), () => {
   //    * move the processing of the event to a file called `handlers.js`.
      
     services.songRequest.subscribe(
-      events. SONGREQUEST_PIPELINE_SPOTIFYINFO_RECEIVED,
+      events.SONGREQUEST_SPOTIFYINFO_RECEIVED,
       handlers.onSpotifyInfoReceived
     )
 
     services.songRequest.subscribe(
-      events. SONGREQUEST_PIPELINE_SPOTIFYINFO_FAILED,
+      events.SONGREQUEST_SPOTIFYINFO_FAILED,
       handlers.onSpotifyInfoFailed
     )
 
     services.songRequest.subscribe(
-      events. SONGREQUEST_PIPELINE_YOUTUBEINFO_RECEIVED,
+      events.SONGREQUEST_YOUTUBEINFO_RECEIVED,
       handlers.onYouTubeInfoReceived
     )
 
+    services.songRequest.subscribe(
+      events.SONGREQUEST_YOUTUBEINFO_FAILED,
+      handlers.onYouTubeInfoFailed
+    )
   }).catch(error => console.log(error))
 })
