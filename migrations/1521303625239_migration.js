@@ -3,7 +3,7 @@ exports.up = function(pgm) {
     {
       'spotify_info_error' : {type: 'jsonb'},
       'youtube_matches_error' : {type: 'jsonb'},
-      'youtube_matches' : {type: 'jsonb[]'},
+      'youtube_matches' : {type: 'jsonb'},
       'key' : {type: 'string'},
       'download_error' : {type: 'jsonb'}
     }

@@ -81,6 +81,13 @@ describe('DB', function () {
         let songRequest = await db.getSongRequestWithID(fakeSongRequest.id)
         assert.equal(songRequest.status, errors.MATCH_NOT_FOUND)
       })
+      
+      it ('should add youtube_matches', async function () {
+        const jsonArrayToSave = JSON.stringify([{ this: 'isAwesome' }])
+        const savedSongRequest = await db.updateSongRequestWithID(fakeSongRequest.id, { youtube_matches: jsonArrayToSave })
+        let songRequest = await db.getSongRequestWithID(fakeSongRequest.id)
+        assert.equal(JSON.stringify(songRequest.youtube_matches), jsonArrayToSave)
+      })
     })
   })
 })
