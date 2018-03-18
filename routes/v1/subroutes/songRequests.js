@@ -94,9 +94,9 @@ function completeSongAcquisition(req, res, next) {
         if (err) return finish(err)
         db.updateSongRequestWithID(songRequest.id, { status: status.COMPLETED,
                                                      completed: 'NOW()' })
-          .then(() => finish(null, { song: song,
-                                     songRequest: songRequest,
-                                     completionMS: (new Date().getTime() - songRequest.created_at.getTime())/1000 }))
+          .then((savedSongRequest) => finish(null, { song: song,
+                                                    songRequest: savedSongRequest,
+                                                    completionMS: (savedSongRequest.completed - songRequest.created_at)/1000 }))
           .catch(err => finish(err))
       })
     })
