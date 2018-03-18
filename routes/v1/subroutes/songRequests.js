@@ -96,7 +96,7 @@ function completeSongAcquisition(req, res, next) {
                                                      completed: new Date() })
           .then(() => finish(null, { song: song,
                                      songRequest: songRequest,
-                                     completionMS: (new Date() - songRequest.created_at)/1000 }))
+                                     completionMS: (new Date().getTime() - songRequest.created_at.getTime())/1000 }))
           .catch(err => finish(err))
       })
     })
