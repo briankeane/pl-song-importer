@@ -80,5 +80,10 @@ app.listen(app.get('port'), () => {
       events.SONGREQUEST_YOUTUBEINFO_FAILED,
       handlers.onYouTubeInfoFailed
     )
+
+    services.song.subscribe(
+      events.SONG_CREATED,
+      handlers.onSongCreated
+    )
   }).catch(error => console.log(error))
 })

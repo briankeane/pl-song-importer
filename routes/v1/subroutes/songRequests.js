@@ -79,6 +79,10 @@ function checkBucket(req, res, next) {
 function completeSongAcquisition(req, res, next) {
   function finish(err, data) {
     if (err) return handleError(res, err)
+    services.song.publish(
+        events.SONG_CREATED,
+        data
+      )
     return res.status(200).json(data)
   }
 
@@ -88,9 +92,11 @@ function completeSongAcquisition(req, res, next) {
       song.key = req.body.key
       song.save((err) => {
         if (err) return finish(err)
-        db.removeSongRequestWithID(songRequest.id)
-          .then(() => finish(null, { status: status.COMPLETED,
-                                     song: song }))
+        db.updateSongRequestWithID(songRequest.id, { status: status.COMPLETED,
+                                                     completed: new Date() })
+          .then(() => finish(null, { song: song,
+                                     songRequest: songRequest,
+                                     completionMS: (new Date() - songRequest.created_at)/1000 }))
           .catch(err => finish(err))
       })
     })
