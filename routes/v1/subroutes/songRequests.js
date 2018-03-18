@@ -93,7 +93,7 @@ function completeSongAcquisition(req, res, next) {
       song.save((err) => {
         if (err) return finish(err)
         db.updateSongRequestWithID(songRequest.id, { status: status.COMPLETED,
-                                                     completed: new Date() })
+                                                     completed: 'NOW()' })
           .then(() => finish(null, { song: song,
                                      songRequest: songRequest,
                                      completionMS: (new Date().getTime() - songRequest.created_at.getTime())/1000 }))
