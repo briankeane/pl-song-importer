@@ -7,4 +7,9 @@ router.get('/', (req, res) => {
 
 router.use('/songRequests', require('./subroutes/songRequests'))
 
+// used to make sure testing heroku-app is awake
+router.use('/ping', (req, res, next) => {
+  res.status(200).json({ message: 'me' })
+})
+
 module.exports = router
