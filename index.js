@@ -21,7 +21,6 @@ mongoose.connection.on('error', function(err) {
   process.exit(-1); // eslint-disable-line no-process-exit
 });
 
-
 app.all('*', function(req, res, next) {
   res.header('Access-Control-Allow-Credentials', true)
   res.header('Access-Control-Allow-Origin', '*')
