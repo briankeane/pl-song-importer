@@ -1,0 +1,40 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'run',
+1 verbose cli   'migrations' ]
+2 info using npm@5.8.0
+3 info using node@v8.9.4
+4 verbose config Skipping project config: /home/playola/.npmrc. (matches userconfig)
+5 verbose run-script [ 'premigrations', 'migrations', 'postmigrations' ]
+6 info lifecycle pl-song-importer@1.0.0~premigrations: pl-song-importer@1.0.0
+7 info lifecycle pl-song-importer@1.0.0~migrations: pl-song-importer@1.0.0
+8 verbose lifecycle pl-song-importer@1.0.0~migrations: unsafe-perm in lifecycle true
+9 verbose lifecycle pl-song-importer@1.0.0~migrations: PATH: /usr/local/lib/node_modules/npm/node_modules/npm-lifecycle/node-gyp-bin:/home/playola/node_modules/.bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+10 verbose lifecycle pl-song-importer@1.0.0~migrations: CWD: /home/playola
+11 silly lifecycle pl-song-importer@1.0.0~migrations: Args: [ '-c', './node_modules/node-pg-migrate/bin/pg-migrate up' ]
+12 silly lifecycle pl-song-importer@1.0.0~migrations: Returned: code: 1  signal: null
+13 info lifecycle pl-song-importer@1.0.0~migrations: Failed to exec migrations script
+14 verbose stack Error: pl-song-importer@1.0.0 migrations: `./node_modules/node-pg-migrate/bin/pg-migrate up`
+14 verbose stack Exit status 1
+14 verbose stack     at EventEmitter.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/npm-lifecycle/index.js:283:16)
+14 verbose stack     at emitTwo (events.js:126:13)
+14 verbose stack     at EventEmitter.emit (events.js:214:7)
+14 verbose stack     at ChildProcess.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/npm-lifecycle/lib/spawn.js:55:14)
+14 verbose stack     at emitTwo (events.js:126:13)
+14 verbose stack     at ChildProcess.emit (events.js:214:7)
+14 verbose stack     at maybeClose (internal/child_process.js:925:16)
+14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:209:5)
+15 verbose pkgid pl-song-importer@1.0.0
+16 verbose cwd /home/playola
+17 verbose Linux 4.9.60-linuxkit-aufs
+18 verbose argv "/usr/local/bin/node" "/usr/local/bin/npm" "run" "migrations"
+19 verbose node v8.9.4
+20 verbose npm  v5.8.0
+21 error code ELIFECYCLE
+22 error errno 1
+23 error pl-song-importer@1.0.0 migrations: `./node_modules/node-pg-migrate/bin/pg-migrate up`
+23 error Exit status 1
+24 error Failed at the pl-song-importer@1.0.0 migrations script.
+24 error This is probably not a problem with npm. There is likely additional logging output above.
+25 verbose exit [ 1, true ]
