@@ -5,11 +5,6 @@ const services = require('./lib/services')
 const handlers = require('./lib/handlers')
 const events = require('./lib/events')
 const mongoose = require('mongoose')
-const Q = require('q')
-
-
-// Connect to MongoDB
-mongoose.Promise = Q.Promise;
 
 mongoose.connect(process.env.MONGODB_URI, { autoReconnect: true }, function (err) {
   console.log('mongoose connected!')
