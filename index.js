@@ -6,15 +6,17 @@ const handlers = require('./lib/handlers')
 const events = require('./lib/events')
 const mongoose = require('mongoose')
 
-mongoose.connect(process.env.MONGODB_URI, { autoReconnect: true }, function (err) {
-  console.log('mongoose connected!')
-  console.log('err? ', err)
-});
-mongoose.connection.on('error', function(err) {
-  console.error(`MongoDB connection error: ${err}`);
-  console.log(`connection uri: ${process.env.MONGODB_URI}`)
-  process.exit(-1); // eslint-disable-line no-process-exit
-});
+const connectToMongo = () => {
+  mongoose.connect(process.env.MONGODB_URI, { autoReconnect: true }, function (err) {
+    console.log('mongoose connected!')
+    console.log('err? ', err)
+  });
+  mongoose.connection.on('error', function(err) {
+    console.error(`MongoDB connection error: ${err}`);
+    setTimeout(connectToMongoose, 1000)
+  });
+}
+connectToMongo()
 
 app.all('*', function(req, res, next) {
   res.header('Access-Control-Allow-Credentials', true)
@@ -48,36 +50,42 @@ app.listen(app.get('port'), () => {
    * to connect to. When all these connections have been made we are safe to publish and
    * subscribe to events from each stream.
    */
-  services.connect().then(() => {
+  const connectToServices = () => {
+    services.connect().then(() => {
+    console.log('connected to amqlib')
+    //   *
+    //    * We can call each service by its name and subscribe or publish directly to that service's
+    //    * message queue. We define the event names in the `events.js` file. Similarly, we also
+    //    * move the processing of the event to a file called `handlers.js`.
+       
+      services.songRequest.subscribe(
+        events.SONGREQUEST_SPOTIFYINFO_RECEIVED,
+        handlers.onSpotifyInfoReceived
+      )
 
-  //   *
-  //    * We can call each service by its name and subscribe or publish directly to that service's
-  //    * message queue. We define the event names in the `events.js` file. Similarly, we also
-  //    * move the processing of the event to a file called `handlers.js`.
-     
-    services.songRequest.subscribe(
-      events.SONGREQUEST_SPOTIFYINFO_RECEIVED,
-      handlers.onSpotifyInfoReceived
-    )
+      services.songRequest.subscribe(
+        events.SONGREQUEST_SPOTIFYINFO_FAILED,
+        handlers.onSpotifyInfoFailed
+      )
 
-    services.songRequest.subscribe(
-      events.SONGREQUEST_SPOTIFYINFO_FAILED,
-      handlers.onSpotifyInfoFailed
-    )
+      services.songRequest.subscribe(
+        events.SONGREQUEST_YOUTUBEINFO_RECEIVED,
+        handlers.onYouTubeInfoReceived
+      )
 
-    services.songRequest.subscribe(
-      events.SONGREQUEST_YOUTUBEINFO_RECEIVED,
-      handlers.onYouTubeInfoReceived
-    )
+      services.songRequest.subscribe(
+        events.SONGREQUEST_YOUTUBEINFO_FAILED,
+        handlers.onYouTubeInfoFailed
+      )
 
-    services.songRequest.subscribe(
-      events.SONGREQUEST_YOUTUBEINFO_FAILED,
-      handlers.onYouTubeInfoFailed
-    )
-
-    services.song.subscribe(
-      events.SONG_CREATED,
-      handlers.onSongCreated
-    )
-  }).catch(error => console.log(error))
+      services.song.subscribe(
+        events.SONG_CREATED,
+        handlers.onSongCreated
+      )
+    }).catch(error => {
+      console.log(error)
+      setTimeout(connectToServices, 1000)
+    })
+  }
+  connectToServices()
 })
