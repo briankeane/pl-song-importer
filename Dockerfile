@@ -31,8 +31,8 @@ RUN npm install -g npm@latest \
 RUN npm install
 
 USER root
-COPY getNGROKAddress.sh /home/playola/getNGROKAddress.sh
-RUN chmod +x /home/playola/getNGROKAddress.sh
+COPY setBaseURLAndStart.sh /home/playola/setBaseURLAndStart.sh
+RUN chmod +x /home/playola/setBaseURLAndStart.sh
 
 USER playola
 # Bundle app source
