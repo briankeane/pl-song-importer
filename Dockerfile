@@ -18,7 +18,6 @@ RUN apt-get update && apt-get -q -y install \
     git \
     build-essential
 
-
 USER playola
 
 COPY package.json /home/playola/
@@ -27,9 +26,15 @@ RUN npm install -g npm@latest \
     node-gyp \
     env-cmd \
     nodemon \
-    env-cmd 
+    env-cmd \
+    ngrok
 RUN npm install
 
+USER root
+COPY getNGROKAddress.sh /home/playola/getNGROKAddress.sh
+RUN chmod +x /home/playola/getNGROKAddress.sh
+
+USER playola
 # Bundle app source
 # (removing for -v instead)
 # COPY . /usr/src/app          

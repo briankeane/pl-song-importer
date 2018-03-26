@@ -6,6 +6,9 @@ const handlers = require('./lib/handlers')
 const events = require('./lib/events')
 const mongoose = require('mongoose')
 
+
+
+console.log('BASE URL: ------------------ ', process.env.BASE_URL)
 const connectToMongo = () => {
   mongoose.connect(process.env.MONGODB_URI, { autoReconnect: true }, function (err) {
     console.log('mongoose connected!')
