@@ -92,3 +92,8 @@ app.listen(app.get('port'), () => {
   }
   connectToServices()
 })
+
+// explicitly log stack trace for unhandled rejections
+process.on('unhandledRejection', (err, p) => {
+  console.log(err)
+})

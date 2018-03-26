@@ -11,37 +11,10 @@ const spotify = require('../../../lib/services/spotify')
 const Song = require('../../../lib/mongoose/song.model')
 
 
-function checkForSong(req, res, next) {
-  console.log('checking for song...')
-  Song.find({ 'spotifyInfo.id': req.params.spotifyID }, function (err, foundSongs) {
-    if (err) return handleError(res, err)
-    if (foundSongs.length) {
-      return res.status(200).send({ song: foundSongs[0], status: status.COMPLETED })
-    }
-    next()
-  })
-}
-
-function checkForSongRequest(req, res, next) {
-  console.log('checking for songRequest...')
-  db.getSongRequestWithSpotifyID(req.params.spotifyID)
+function getOrCreateSongRequest(req, res, next) {
+  lib.getOrCreateSongRequest(req.params.spotifyID)
     .then(songRequest => res.status(200).json(songRequest))
-    .catch(err => {
-      (err.message === errors.SONG_REQUEST_DOES_NOT_EXIST) 
-      ? next() 
-      : handleError(res, err)
-    })
-}
-
-function initiateAcquisition(req, res, next) {
-  function finish(err, data) {
-    if (err) return handleError(res, err)
-    return res.status(200).json(data)
-  }
-
-  lib.createSongRequest(req.params.spotifyID)
-    .then(songRequest => finish(null, songRequest))
-    .catch(err => finish(err))
+    .catch(err => handleError(err))
 }
 
 function checkBucket(req, res, next) {
@@ -53,32 +26,9 @@ function checkBucket(req, res, next) {
 }
 
 function completeSongAcquisition(req, res, next) {
-  function finish(err, data) {
-    if (err) return handleError(res, err)
-    services.song.publish(
-        events.SONG_CREATED,
-        data
-      )
-    return res.status(200).json(data)
-  }
-
-  db.getSongRequestWithSpotifyID(req.params.spotifyID)
-    .then(songRequest => {
-      var song = Song.newFromSpotifyInfo(songRequest.spotify_info)
-      song.key = req.body.key
-      song.save((err) => {
-        if (err) return finish(err)
-        db.updateSongRequestWithID(songRequest.id, { status: status.COMPLETED,
-                                                     completed: 'now()',
-                                                     song_id: song.id,
-                                                     is_processing: false })
-          .then((savedSongRequest) => finish(null, { song: song,
-                                                    songRequest: savedSongRequest,
-                                                    completionMS: (savedSongRequest.completed - songRequest.created_at)/1000 }))
-          .catch(err => finish(err))
-      })
-    })
-    .catch(err => finish(err))
+  lib.completeSongAcquisition({ spotifyID: req.params.spotifyID, key: req.body.key })
+    .then(data => res.status(200).json(data))
+    .catch(err => handleError(res, err))
 }
 
 function getSpotifyIDs(req, res, next) {
@@ -88,8 +38,8 @@ function getSpotifyIDs(req, res, next) {
 }
 
 router.get('/getSpotifyIDs', getSpotifyIDs)
-router.post('/complete/:spotifyID', checkBucket, checkForSong, completeSongAcquisition)
-router.post('/:spotifyID', checkForSong, checkForSongRequest, initiateAcquisition)
+router.post('/complete/:spotifyID', checkBucket, completeSongAcquisition)
+router.post('/:spotifyID', getOrCreateSongRequest)
 
 
 function handleError(res, err) {
