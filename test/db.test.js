@@ -94,5 +94,55 @@ describe('DB', function () {
         console.log(savedSongRequest.completed)
       })
     })
+
+
+    describe('Search', function () {
+      let fakeUsers = []
+
+      before(async function () {
+        this.timeout(15000)
+
+        let songRequests = [
+          { spotify_id: 'spotifyID1', key: 'key1', is_processing: true },
+          { spotify_id: 'spotifyID2', key: 'key2', is_processing: true },
+          { spotify_id: 'spotifyID3', key: 'key3', is_processing: false },
+          { spotify_id: 'spotifyID4', key: 'key4', is_processing: false },
+          { spotify_id: 'spotifyID5', key: 'key5', is_processing: false }
+        ]
+
+        for (let i = 0; i < people.length; i++) {
+          let songRequest = songRequests[i]
+          let songRequest = await db.createSongRequest(songRequests[i])
+          fakeSongRequests.push(songRequest)
+        }
+      })
+
+      after(async function () {
+        this.timeout(15000)
+        for (let songRequest of fakeSongRequests) {
+          await db.removeUserWithEmail(songRequest.email)
+        }
+      })
+
+      it('should find users matching a query (ali)', async function () {
+        let users = await db.getUsersMatchingQuery('ali')
+        assert.isAtLeast(users.length, 1)
+      })
+
+      it('should find users matching a query (man)', async function () {
+        let users = await db.getUsersMatchingQuery('man')
+        assert.isAtLeast(users.length, 2)
+      })
+
+      it('should find users matching a query (la)', async function () {
+        let users = await db.getUsersMatchingQuery('la')
+        assert.isAtLeast(users.length, 2)
+      })
+
+      it('should find users matching a query (69)', async function () {
+        let users = await db.getUsersMatchingQuery('69')
+        assert.isAtLeast(users.length, 2)
+      })
+    })
   })
 })

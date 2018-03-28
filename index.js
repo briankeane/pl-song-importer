@@ -5,6 +5,7 @@ const services = require('./lib/services')
 const handlers = require('./lib/handlers')
 const events = require('./lib/events')
 const mongoose = require('mongoose')
+const memwatch = require('memwatch-next')
 
 
 
@@ -92,6 +93,10 @@ app.listen(app.get('port'), () => {
   }
   connectToServices()
 })
+
+memwatch.on('leak', (info) => {
+  console.error('Memory leak detected:\n', info);
+});
 
 // explicitly log stack trace for unhandled rejections
 process.on('unhandledRejection', (err, p) => {

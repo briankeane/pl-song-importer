@@ -9,12 +9,13 @@ const errors = require('../../../lib/errors')
 const status = require('../../../lib/status')
 const spotify = require('../../../lib/services/spotify')
 const Song = require('../../../lib/mongoose/song.model')
+const songRequestCache = require('../../../lib/cache/songRequest')
 
 
 function getOrCreateSongRequest(req, res, next) {
   lib.getOrCreateSongRequest(req.params.spotifyID)
     .then(songRequest => res.status(200).json(songRequest))
-    .catch(err => handleError(err))
+    .catch(err => handleError(res, err))
 }
 
 function checkBucket(req, res, next) {
@@ -37,9 +38,16 @@ function getSpotifyIDs(req, res, next) {
   .catch(err => res.status(500).json(err))
 }
 
+function getMatchingQuery(req, res, next) {
+  lib.getSongRequestsMatchingQueryString(req.query.searchText)
+    .then(results => res.status(200).json(results))
+    .catch(err => res.status(500).send(err))
+}
+
 router.get('/getSpotifyIDs', getSpotifyIDs)
+router.get('/search', getMatchingQuery)
 router.post('/complete/:spotifyID', checkBucket, completeSongAcquisition)
-router.post('/:spotifyID', getOrCreateSongRequest)
+router.post('/:spotifyID', songRequestCache.show, getOrCreateSongRequest)
 
 
 function handleError(res, err) {
