@@ -86,6 +86,11 @@ app.listen(app.get('port'), () => {
         events.SONG_CREATED,
         handlers.onSongCreated
       )
+
+      // set max prefetch to avoid overloading heroku memory
+      for (let service of services.streams) {
+        service.channel.prefetch(50)
+      }
     }).catch(error => {
       console.log(error)
       setTimeout(connectToServices, 1000)
