@@ -55,5 +55,5 @@ jobs:
               git push heroku master
               git push testing master
             elif [ "${CIRCLE_BRANCH}" == "develop" ]; then
-              git push staging master
+              git push staging develop:master
             fi
