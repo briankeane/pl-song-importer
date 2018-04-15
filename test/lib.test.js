@@ -20,7 +20,7 @@ const Song = require('../lib/mongoose/song')
 
 describe ('lib', function () {
   before(function (done) {
-    console.log('MONGODB_URI: ', process.env.MONGODB_URI')
+    console.log('MONGODB_URI: ', process.env.MONGODB_URI)
     mongoose.connect(process.env.MONGODB_URI, { autoReconnect: true }, (err) => {
       done()
     })
