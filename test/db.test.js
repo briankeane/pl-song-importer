@@ -89,7 +89,7 @@ describe('DB', function () {
         assert.equal(JSON.stringify(songRequest.youtube_matches), jsonArrayToSave)
       })
 
-      it.only ('adds a timestamp', async function () {
+      it ('adds a timestamp', async function () {
         const savedSongRequest = await db.updateSongRequestWithID(fakeSongRequest.id, { completed: 'NOW()' })
         console.log(savedSongRequest.completed)
       })

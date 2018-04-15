@@ -1,14 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const lib = require('../../../lib/lib')
-const db = require('../../../lib/db')
-const events = require('../../../lib/events')
-const services = require('../../../lib/services')
-const youTube = require('../../../lib/services/youTube')
 const errors = require('../../../lib/errors')
-const status = require('../../../lib/status')
-const spotify = require('../../../lib/services/spotify')
-const Song = require('../../../lib/mongoose/song.model')
+const Song = require('../../../lib/mongoose/song')
 const songRequestCache = require('../../../lib/cache/songRequest')
 
 
@@ -32,6 +26,9 @@ function completeSongAcquisition(req, res, next) {
     .catch(err => handleError(res, err))
 }
 
+//
+// this is just to make massive testing easier
+//
 function getSpotifyIDs(req, res, next) {
   Song.getSpotifyIDs()
   .then(ids => res.status(200).json({ spotifyIDs: ids }))
