@@ -92,7 +92,7 @@ app.listen(app.get('port'), () => {
         service.channel.prefetch(50)
       }
     }).catch(error => {
-      console.log(error)
+      console.log('error connecting to services.  retrying after 1 sec')
       setTimeout(connectToServices, 1000)
     })
   }
