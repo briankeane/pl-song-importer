@@ -6,7 +6,7 @@
   "scripts": {
     "migrations": "./node_modules/node-pg-migrate/bin/pg-migrate up",
     "migrate-create": "./node_modules/node-pg-migrate/bin/pg-migrate create migration",
-    "start": "node index.js",
+    "start": "node app.js",
     "test-local": "env-cmd .env mocha --compilers js:babel-register --require babel-polyfill",
     "test": "mocha --compilers js:babel-register --require babel-polyfill"
   },
@@ -21,7 +21,10 @@
     "babel-polyfill": "^6.23.0",
     "babel-register": "^6.24.1",
     "body-parser": "^1.17.2",
+    "compression": "^1.7.2",
     "express": "^4.15.3",
+    "express-bearer-token": "^2.1.1",
+    "express-jwt": "^5.3.1",
     "fuse.js": "^3.2.0",
     "jsonwebtoken": "^7.4.1",
     "lodash": "^4.17.5",
@@ -33,7 +36,9 @@
     "q": "^1.5.1",
     "querystring": "^0.2.0",
     "redis": "^2.8.0",
-    "request": "^2.83.0"
+    "request": "^2.83.0",
+    "swagger-express-mw": "^0.7.0",
+    "swagger-tools": "^0.10.3"
   },
   "devDependencies": {
     "assert": "^1.4.1",

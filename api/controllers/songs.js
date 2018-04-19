@@ -1,7 +1,4 @@
-const express = require('express')
-const router = express.Router()
-const lib = require('../../../lib/lib')
-const errors = require('../../../lib/errors')
+const lib = require('../../lib/lib')
 
 function completeAudioReplacement(req, res, next) {
   lib.completeReplaceAudioForSong({ songID: req.params.songID, key: req.body.key })
@@ -16,7 +13,7 @@ function requestAudioReplacement(req, res, next) {
     .catch(err => res.send(err.statusCode).json({ message: err.message }))
 }
 
-router.post('/:songID/completeAudioReplacement', replaceAudio)
-router.put('/:songID/requestAudioReplacement', requestReplacementAudio)
-
-module.exports = router
+module.exports = {
+  completeAudioReplacement,
+  requestAudioReplacement
+}

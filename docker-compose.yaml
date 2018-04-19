@@ -1,0 +1,72 @@
+version: '2'
+services:
+  # --------- Common Containers --------- #
+  pl_rabbitmq:
+    container_name: "pl_rabbitmq"
+    image: rabbitmq:3-management
+    ports:
+      - "8080:15672"
+    environment: 
+      RABBITMQ_DEFAULT_PASS: pass
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_VHOST: vhost
+
+  pl_api_mongo:
+    container_name: "pl_api_mongo"
+    image: "mongo:3.7.3"
+    ports:
+      - "27017:27017"
+  
+  # ---------- SONG ---------- #
+  pl_song_service_redis:
+    container_name: "pl_song_service_redis"
+    image: "redis:alpine"
+
+  pl_song_service_postgres:
+    container_name: "pl_song_service_postgres"
+    image: "postgres:10.3-alpine"
+    environment:
+      POSTGRES_PASSWORD: pass
+
+  pl_song_service_db_migrate:
+    container_name: "pl_song_service_db_migrate"
+    build: .
+    volumes:
+      - .:/home/playola
+      - /home/playola/node_modules
+    depends_on:
+      - pl_song_service_postgres
+    entrypoint: "env-cmd .env npm run migrations"
+    environment:
+      MONGODB_URI: mongodb://pl_api_mongo:27017/pl_api_dev
+      DATABASE_URL: postgres://postgres:pass@pl_song_service_postgres:5432/postgres
+      REDIS_URL: redis://pl_song_service_redis:6379
+
+  pl_song_service_ngrok:
+    container_name: pl_song_service_ngrok
+    image: wernight/ngrok
+    depends_on:
+      - pl_song_service
+    ports:
+      - "0.0.0:4040:4040"
+    links: 
+      - "pl_song_service"
+    environment:
+      NGROK_PORT: pl_song_service:10040
+      NGROK_AUTH: "${NGROK_AUTH}"
+  
+  pl_song_service:
+    container_name: "pl_song_service"
+    build: .
+    ports:
+      - "10040:10040"
+    volumes:
+      - .:/home/playola
+      - /home/playola/node_modules
+      - ./setBaseURLAndStart.sh:/home/playola/setBaseURLAndStart.sh
+    depends_on:
+      - pl_rabbitmq
+      - pl_song_service_redis
+      - pl_song_service_postgres
+    env_file: ./.env
+    command: bash -c "source ./setBaseURLAndStart.sh"

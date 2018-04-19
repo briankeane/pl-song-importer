@@ -16,4 +16,4 @@ do
 done 
 
 echo "SETTING BASE_URL to: ${BASE_URL}"
-env-cmd .env nodemon index.js
+env-cmd .env nodemon app.js

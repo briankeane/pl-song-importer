@@ -1,0 +1,332 @@
+swagger: "2.0"
+info:
+  version: "2.0.0"
+  title: pl-song-service
+basePath: /v1
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  api_key:
+    type: apiKey
+    description: Authorization token used in query parameter
+    in: query
+    name: api_key
+  jwt_key:
+    type: apiKey
+    description: Authorization json web token used in header
+    in: header
+    name: Authorization
+paths:
+  /songs/{song_id}/completeAudioReplacement:
+    x-swagger-router-controller: songs
+    post:
+      tags:
+        - songs
+      description: |
+        This endpoint is the webhook used by the audio converter service to
+        report that acquisition of the audio file has completed.  If successful,
+        the song's 'key' property will be changed.
+      operationId: completeAudioReplacement
+      parameters:
+        - name: song_id
+          in: path
+          description: The ID of the song
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/AudioReplacementRequest"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /songs/{song_id}/requestAudioReplacement:
+    x-swagger-router-controller: songs
+    post:
+      tags:
+      - songs
+      description: |
+        This endpoint requests a replacement for a song's audio file.
+      operationId: requestAudioReplacement
+      parameters:
+        - name: song_id
+          in: path
+          description: The ID of the song
+          required: true
+          type: string
+        - name: data
+          in: body
+          description: The info for replacing the song audio
+          required: true
+          schema:
+            type: object
+            required:
+              -   youTubeID
+            properties:
+              youTubeID:
+                type: string
+                description: the id of the youtube video containing the desired replacement audio. 
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/AudioReplacementRequest"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /songRequests/search:
+    x-swagger-router-controller: songRequests
+    get:
+      tags:
+        - songRequests
+      description: |
+        Search for a song request matching the searchText
+      operationId: search
+      parameters:
+        - name: searchText
+          in: query
+          description: the text to search for
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/SongRequests"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /songRequests/complete/{spotifyID}:
+    x-swagger-router-controller: songRequests
+    post:
+      tags:
+        - songRequests
+      description: |
+        Used to report that audio acquisition has completed -- used as a webhook
+        for the audio converter
+      operationId: completeSongAcquisition
+      parameters:
+        - name: spotifyID
+          in: path
+          description: The spotifyID of the acquired audio
+          required: true
+          type: string
+        - name: data
+          in: body
+          required: true
+          schema:
+            type: object
+            required:
+              - bucketName
+              - key
+            properties:
+              bucketName:
+                type: string
+                description: the name of the bucket containing the completed song
+                example: playolasongstestbucket
+              key:
+                type: string
+                description: the key of the newly stored audioFile
+                example: sugar.m4a
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/SongRequest'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /songRequests/{spotifyID}:
+    x-swagger-router-controller: songRequests
+    post:
+      tags:
+        - songRequests
+      operationId: getOrCreateSongRequest
+      parameters:
+        - name: spotifyID
+          in: path
+          description: The spotifyID of the desired song
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/SongRequest'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+definitions:
+  AudioReplacementRequest:
+    type: object
+    properties:
+      song:
+        $ref: '#/definitions/Song'
+      youtube_id:
+        type: string
+        example: O46hKaW5eY4
+      status:
+        type: string
+        example: 'processing'
+        description: |
+          The status of the audioReplacementRequest. Possibilities are:
+          * 'processing'
+          * 'completed'
+          * 'errored'
+  Song:
+    type: object
+    properties:
+      id:
+        type: string
+        description: The song's playola id.
+        example: "5531636b4b1f7e86214235cc"
+      title:
+        type: string
+        description: The title of the song.
+        example: "Fade to Gray"
+      artist:
+        type: string
+        description: The artist's name.
+        example: "Rachel Loy"
+      album:
+        type: string
+        description: The album that the song comes from.
+        example: "Broken Machine"
+      isrc:
+        type: string
+        description: The song's isrc code.
+        example: "ushm21226779"
+      key:
+        type: string
+        description: The s3 key for the song's file location.
+        example: "-pl-0000012-Rachel-Loy-Fade-to-Gray.mp3"
+      audioFileUrl:
+        type: string
+        description: The url where the audio file can be downloaded
+        example: "//songs.playola.fm/-pl-0000438-RachelLoy-AfterTheStorm.mp3"
+      duration:
+        type: integer
+        description: The duration of the song in ms.
+        example: 290925
+      albumArtworkUrl:
+        type: string
+        description: The location of the albumArtwork file.
+        example: "http://is1.mzstatic.com/image/pf/us/r30/Music/v4/72/1b/62/721b6246-b012-ef31-c2e8-0a141c81517c/884501724586.600x600-75.jpg"
+      albumArtworkUrlSmall:
+        type: string
+        description: The location of a smaller albumArtwork file if available.
+        example: "http://is1.mzstatic.com/image/pf/us/r30/Music/v4/72/1b/62/721b6246-b012-ef31-c2e8-0a141c81517c/884501724586.100x100-75.jpg"
+      spotifyID:
+        type: string
+        description: The song's spotify track id.
+        example: "7BvpGkNPd49xhN7EguxJz0"
+      trackViewUrl:
+        type: string
+        description: The iTunes 'buy' link for the song.
+        example: "https://itunes.apple.com/us/album/fade-to-gray/id571168342?i=571168348&uo=4"
+      eom:
+        type: integer
+        description: The 'end of message' in ms.  (The point where exit crossfade should begin song-to-song)
+        example: 160000
+      boo:
+        type: integer
+        description: The 'beginning of outro' in ms.
+        example: 155000
+      eoi:
+        type: integer
+        description: The 'end of intro' in ms.
+        example: 8000
+
+  Songs:
+    type: array
+    items:
+      $ref: '#/definitions/Song'
+
+  SongRequest:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: the id of the songRequest
+        example: 42
+      spotify_id:
+        type: string
+        description: the spotify id of the desired song
+        example: 1TFwAAdsmaH92b8g3dTec2
+      spotify_info:
+        $ref: '#/definitions/SpotifyInfo'
+      spotify_info_error:
+        type: string
+        description: if an error occured retrieving the spotifyInfo, it's description will be here
+        example: 'track not found'
+      youtube_matches:
+        type: array
+        description: an array of possible youtube matches for the song, in order of match likelihood
+        items:
+          $ref: '#/definitions/YouTubeMatches'
+        example: 'no matches found'
+      key:
+        type: string
+        description: the key for the stored audio file
+        example: sugar.m4a
+      download_error:
+        type: string
+        description: if an error occured during the audio file download, it's description will be stored here
+        example: 'conversion failed'
+      status:
+        type: string
+        description: A description of where we are in the song acquisition process
+        example: 'completed'
+      song_id:
+        type: string
+        description: Once a song has been created, it's id is stored here
+        example: 5531636b4b1f7e86214235cc
+      is_processing:
+        type: boolean
+        description: true if the process is happening now. false if it has succeeded or failed.
+        example: true
+      completed:
+        type: boolean
+        description: true only if the song has been acquired
+  SongRequests:
+    type: array
+    items:
+      $ref: '#/definitions/SongRequest'
+
+  YouTubeMatch:
+    type: object
+    properties:
+      id:
+        type: string
+        example: 'asdfsadf'
+
+
+  YouTubeMatches:
+    type: array
+    items:
+      $ref: '#/definitions/YouTubeMatch'
+  SpotifyInfo:
+    type: object
+    properties:
+      name:
+        type: string
+        description: The name of the song
+        example: Metallica
+
+  ErrorResponse:
+    type: object
+    required:
+      - message
+    properties:
+      message:
+        type: string

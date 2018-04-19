@@ -1,10 +1,7 @@
-const express = require('express')
-const router = express.Router()
-const lib = require('../../../lib/lib')
-const errors = require('../../../lib/errors')
-const Song = require('../../../lib/mongoose/song')
-const songRequestCache = require('../../../lib/cache/songRequest')
-
+const lib = require('../lib/lib')
+const errors = require('../lib/errors')
+const Song = require('../lib/mongoose/song')
+const songRequestCache = require('../lib/cache/songRequest')
 
 function getOrCreateSongRequest(req, res, next) {
   lib.getOrCreateSongRequest(req.params.spotifyID)
@@ -41,16 +38,16 @@ function getMatchingQuery(req, res, next) {
     .catch(err => res.status(500).send(err))
 }
 
-router.get('/getSpotifyIDs', getSpotifyIDs)
-router.get('/search', getMatchingQuery)
-router.post('/complete/:spotifyID', checkBucket, completeSongAcquisition)
-router.post('/:spotifyID', songRequestCache.show, getOrCreateSongRequest)
-
-
 function handleError(res, err) {
   console.log(err);
   return res.status(err.statusCode).json({ message: err.message })
 }
 
 
-module.exports = router
+module.exports = {
+  getOrCreateSongRequest,
+  checkBucket,
+  completeSongAcquisition,
+  getSpotifyIDs,
+  getMatchingQuery
+}
