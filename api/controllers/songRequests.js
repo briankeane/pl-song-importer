@@ -5,7 +5,6 @@ const songRequestCache = require('../../lib/cache/songRequest')
 const HttpError = require('../../lib/models/HttpError')
 
 function getOrCreateSongRequest(req, res, next) {
-  console.log(req.swagger.params.spotify_id.value)
   lib.getOrCreateSongRequest(req.swagger.params.spotify_id.value)
     .then(songRequest => res.status(200).json(songRequest))
     .catch(err => handleError(res, new HttpError(err.statusCode, err.message)))
@@ -20,7 +19,7 @@ function checkBucket(req, res, next) {
 }
 
 function completeSongAcquisition(req, res, next) {
-  lib.completeSongAcquisition({ spotifyID: req.params.spotifyID, key: req.body.key })
+  lib.completeSongAcquisition({ spotifyID: req.swagger.params.spotify_id.value, key: req.body.key })
     .then(data => res.status(200).json(data))
     .catch(err => handleError(res, err))
 }
