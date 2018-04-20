@@ -19,7 +19,7 @@ securityDefinitions:
     in: header
     name: Authorization
 paths:
-  /songs/{song_id}/completeAudioReplacement:
+  /songs/{songID}/completeAudioReplacement:
     x-swagger-router-controller: songs
     post:
       tags:
@@ -30,7 +30,7 @@ paths:
         the song's 'key' property will be changed.
       operationId: completeAudioReplacement
       parameters:
-        - name: song_id
+        - name: songID
           in: path
           description: The ID of the song
           required: true
@@ -44,7 +44,7 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /songs/{song_id}/requestAudioReplacement:
+  /songs/{songID}/requestAudioReplacement:
     x-swagger-router-controller: songs
     post:
       tags:
@@ -53,7 +53,7 @@ paths:
         This endpoint requests a replacement for a song's audio file.
       operationId: requestAudioReplacement
       parameters:
-        - name: song_id
+        - name: songID
           in: path
           description: The ID of the song
           required: true
@@ -102,7 +102,7 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /songRequests/complete/{spotifyID}:
+  /songRequests/complete/{spotify_id}:
     x-swagger-router-controller: songRequests
     post:
       tags:
@@ -112,9 +112,9 @@ paths:
         for the audio converter
       operationId: completeSongAcquisition
       parameters:
-        - name: spotifyID
+        - name: spotify_id
           in: path
-          description: The spotifyID of the acquired audio
+          description: The spotify_id of the acquired audio
           required: true
           type: string
         - name: data
@@ -144,16 +144,16 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
 
-  /songRequests/{spotifyID}:
+  /songRequests/{spotify_id}:
     x-swagger-router-controller: songRequests
     post:
       tags:
         - songRequests
       operationId: getOrCreateSongRequest
       parameters:
-        - name: spotifyID
+        - name: spotify_id
           in: path
-          description: The spotifyID of the desired song
+          description: The spotify_id of the desired song
           required: true
           type: string
       responses:
@@ -226,7 +226,7 @@ definitions:
         type: string
         description: The location of a smaller albumArtwork file if available.
         example: "http://is1.mzstatic.com/image/pf/us/r30/Music/v4/72/1b/62/721b6246-b012-ef31-c2e8-0a141c81517c/884501724586.100x100-75.jpg"
-      spotifyID:
+      spotify_id:
         type: string
         description: The song's spotify track id.
         example: "7BvpGkNPd49xhN7EguxJz0"
@@ -287,7 +287,7 @@ definitions:
         type: string
         description: A description of where we are in the song acquisition process
         example: 'completed'
-      song_id:
+      songID:
         type: string
         description: Once a song has been created, it's id is stored here
         example: 5531636b4b1f7e86214235cc

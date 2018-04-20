@@ -1,12 +1,14 @@
-const lib = require('../lib/lib')
-const errors = require('../lib/errors')
-const Song = require('../lib/mongoose/song')
-const songRequestCache = require('../lib/cache/songRequest')
+const lib = require('../../lib/lib')
+const errors = require('../../lib/errors')
+const Song = require('../../lib/mongoose/song')
+const songRequestCache = require('../../lib/cache/songRequest')
+const HttpError = require('../../lib/models/HttpError')
 
 function getOrCreateSongRequest(req, res, next) {
-  lib.getOrCreateSongRequest(req.params.spotifyID)
+  console.log(req.swagger.params.spotify_id.value)
+  lib.getOrCreateSongRequest(req.swagger.params.spotify_id.value)
     .then(songRequest => res.status(200).json(songRequest))
-    .catch(err => handleError(res, err))
+    .catch(err => handleError(res, new HttpError(err.statusCode, err.message)))
 }
 
 function checkBucket(req, res, next) {

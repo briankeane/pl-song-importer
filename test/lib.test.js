@@ -79,6 +79,13 @@ describe ('lib', function () {
   })
 
   describe ('getOrCreateSongRequest', function () {
+    it ('errors if there is no spotifyID', async function () {
+      try {
+        createdSongRequest = await lib.getOrCreateSongRequest()
+      } catch (err) {
+        assert.equal(err.message, 'spotifyID not included')
+      }
+    })
 
     it ('gets an existing songRequest', async function () {
       var createdSongRequest = await lib.getOrCreateSongRequest(songRequest.spotify_id)
