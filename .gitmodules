@@ -4,3 +4,6 @@
 [submodule "deps/event-stream"]
 	path = deps/event-stream
 	url = https://9f56d0023009303481abee7a2ef7cb99d4128ebb:x-oauth-basic@github.com/briankeane/pl-event-stream-node.git
+[submodule "deps/swagger-defs"]
+	path = deps/swagger-defs
+	url = https://github.com/briankeane/pl-swagger-defs.git
