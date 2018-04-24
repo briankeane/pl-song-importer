@@ -103,7 +103,7 @@ paths:
           description: Error
           schema:
             $ref: "./deps/swagger-defs/commonDefinitions.yaml#/ErrorResponse"
-  /songRequests/complete/{spotify_id}:
+  /songRequests/complete/{spotifyID}:
     x-swagger-router-controller: songRequests
     post:
       tags:
@@ -113,7 +113,7 @@ paths:
         for the audio converter
       operationId: completeSongAcquisition
       parameters:
-        - name: spotify_id
+        - name: spotifyID
           in: path
           description: The spotify_id of the acquired audio
           required: true
@@ -145,16 +145,16 @@ paths:
           schema:
             $ref: "./deps/swagger-defs/commonDefinitions.yaml#/ErrorResponse"
 
-  /songRequests/{spotify_id}:
+  /songRequests/{spotifyID}:
     x-swagger-router-controller: songRequests
     post:
       tags:
         - songRequests
       operationId: getOrCreateSongRequest
       parameters:
-        - name: spotify_id
+        - name: spotifyID
           in: path
-          description: The spotify_id of the desired song
+          description: The spotify id of the desired song
           required: true
           type: string
       responses:

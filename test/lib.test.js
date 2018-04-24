@@ -130,8 +130,7 @@ describe ('lib', function () {
 
   describe ('completeSongAcquisition', function () {
     it ('adds the new song to the db', async function () {
-      var completedSongRequest = await lib.completeSongAcquisition({ spotifyID: songRequest.spotify_id, key: 'aNewKey' })
-      var newSong = completedSongRequest.song
+      var newSong = await lib.completeSongAcquisition({ spotifyID: songRequest.spotify_id, key: 'aNewKey' })
       assert.equal(newSong.spotifyInfo.id, spotifyInfo.id)
       assert.equal(newSong.album, spotifyInfo.album.name)
       assert.equal(newSong.title, spotifyInfo.name)
@@ -142,9 +141,9 @@ describe ('lib', function () {
     })
 
     it ('updates the old songRequest', async function () {
-      var completedSongRequest = await lib.completeSongAcquisition({ spotifyID: songRequest.spotify_id, key: 'aNewKey' })
-      assert.isObject(completedSongRequest.song)
-      assert.equal(completedSongRequest.song_id, completedSongRequest.song.id)
+      var newSong = await lib.completeSongAcquisition({ spotifyID: songRequest.spotify_id, key: 'aNewKey' })
+      var completedSongRequest = await db.getSongRequestWithID(songRequest.id)
+      assert.equal(completedSongRequest.song_id, newSong.id)
       assert.equal(completedSongRequest.is_processing, false)
     })
     
