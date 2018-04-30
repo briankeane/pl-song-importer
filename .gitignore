@@ -8,3 +8,4 @@ node_modules/
 .npm/
 .node-gyp/
 .babel.json
+.deploymentENVs/

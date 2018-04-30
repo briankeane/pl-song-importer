@@ -36,7 +36,7 @@ function connectToServicesWithRetry() {
   return new Promise((resolve, reject) => {
     services.connect().then(() => {
       console.log('connected to amqlib')
-
+      handlers.subscribeAll()
       // set max prefetch to avoid overloading heroku memory
       for (let service of services.streams) {
         service.channel.prefetch(50)
@@ -65,9 +65,6 @@ SwaggerExpress.create(config, function(err, swaggerExpress) {
     mongoDB.connect(), 
     connectToServicesWithRetry()
   ])
-    .then(() => {
-      handlers.subscribeAll()
-    })
     .catch(err => console.log(err))
 
     app.get('/', (req, res) => {

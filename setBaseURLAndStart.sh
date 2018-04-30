@@ -4,7 +4,7 @@ unset BASE_URL
 until [ "${BASE_URL:-}" ]
 do
   echo "DOING"
-    rootURL=$(curl --connect-timeout 5 'pl_song_service_ngrok:4040/api/tunnels' \
+    rootURL=$(curl --connect-timeout 5 'pl_songs_ngrok:4040/api/tunnels' \
               | sed -nE 's/.*public_url":"https:..([^"]*).*/\1/p')
     echo $rootUrL
     if [ -n "$rootURL" ]
