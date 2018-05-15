@@ -74,6 +74,11 @@ SwaggerExpress.create(config, function(err, swaggerExpress) {
     app.get('/swagger.yaml', (req, res) => {
       res.sendFile(path.join(`${config.appRoot}/api/swagger/swagger.yaml`))
     })
+    
+    app.get('/deps/swagger-defs/commonDefinitions.yaml', (req, res) => {
+      res.sendFile(path.join(`${config.appRoot}/deps/swagger-defs/commonDefinitions.yaml`))
+    })
+
 })
 
 // explicitly log stack trace for unhandled rejections
