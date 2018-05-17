@@ -39,7 +39,7 @@ function connectToServicesWithRetry() {
       handlers.subscribeAll()
       // set max prefetch to avoid overloading heroku memory
       for (let service of services.streams) {
-        service.channel.prefetch(50)
+        service.channel.prefetch(100)
       }
       resolve()
     })
@@ -85,3 +85,6 @@ SwaggerExpress.create(config, function(err, swaggerExpress) {
 process.on('unhandledRejection', (err, p) => {
   console.log(err)
 })
+
+exports = module.exports = app
+

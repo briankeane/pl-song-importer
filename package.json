@@ -8,7 +8,7 @@
     "migrate-create": "./node_modules/node-pg-migrate/bin/pg-migrate create migration",
     "start": "node app.js",
     "test-local": "env-cmd .env mocha --compilers js:babel-register --require babel-polyfill",
-    "test": "mocha --compilers js:babel-register --require babel-polyfill"
+    "test": "mocha --compilers js:babel-register --require babel-polyfill --recursive"
   },
   "author": "Playola Radio Inc",
   "license": "MIT",
@@ -47,7 +47,8 @@
     "env-cmd": "^5.1.0",
     "faker": "^4.1.0",
     "mocha": "^3.4.2",
-    "sinon": "^4.5.0"
+    "sinon": "^4.5.0",
+    "supertest": "^3.1.0"
   },
   "engines": {
     "node": "8.9.4"

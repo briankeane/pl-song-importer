@@ -91,7 +91,7 @@ describe('DB', function () {
 
       it ('adds a timestamp', async function () {
         const savedSongRequest = await db.updateSongRequestWithID(fakeSongRequest.id, { completed: 'NOW()' })
-        console.log(savedSongRequest.completed)
+        assert.notEqual(savedSongRequest.completed, undefined)
       })
     })
 
