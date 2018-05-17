@@ -7,15 +7,27 @@ jobs:
           - PGHOST: 127.0.0.1
           - PGUSER: root
           - MONGODB_URI: mongodb://127.0.0.1:27017/pl_api_test
+          - JWT_SECRET: mySecret
+          - API_TOKEN: myToken
+          - DATABASE_URL: postgres://127.0.0.1:5432/pl_songs
+          - REDIS_URL: redis://127.0.0.1:6379
+          - SONGS_BUCKET_NAME: playolasongstest
+          - CLOUDAMQP_URL: amqp://user:pass@pl_rabbitmq:5672/vhost
 
       - image: circleci/postgres:9.6.2-alpine
         environment:
           - POSTGRES_USER: root
-          - POSTGRES_DB: pl_song_importer
+          - POSTGRES_DB: pl_songs
 
       - image: circleci/mongo
 
       - image: circleci/redis
+
+      - image: rabbitmq:3-management
+        environment: 
+          RABBITMQ_DEFAULT_PASS: pass
+          RABBITMQ_DEFAULT_USER: user
+          RABBITMQ_DEFAULT_VHOST: vhost
 
 
     working_directory: ~/repo
