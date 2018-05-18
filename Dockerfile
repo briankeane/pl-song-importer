@@ -1,4 +1,4 @@
-FROM node:8.9
+FROM node:8.10
 
 # Create new user
 RUN useradd -ms /bin/bash playola
@@ -22,7 +22,7 @@ USER playola
 
 COPY package.json /home/playola/
 
-RUN npm install -g npm@latest \
+RUN npm install -g npm@5.6.0 \
     node-gyp \
     env-cmd \
     nodemon \
