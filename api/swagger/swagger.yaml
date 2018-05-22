@@ -139,8 +139,6 @@ paths:
   /songRequests/complete/{spotifyID}:
     x-swagger-router-controller: songRequests
     post:
-      security:
-        - api_key: []
       tags:
         - songRequests
       description: |
