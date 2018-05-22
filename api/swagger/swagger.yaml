@@ -19,9 +19,38 @@ securityDefinitions:
     in: header
     name: Authorization
 paths:
+  /pingAllServices:
+    x-swagger-router-controller: ping
+    get:
+      security:
+        - api_key: []
+      tags:
+        - ping
+      description: |
+        Make sure authentication is working properly
+      operationId: pingAllServices
+      responses:
+        200:
+          description: Success
+  /ping:
+    x-swagger-router-controller: ping
+    get:
+      security:
+        - api_key: []
+      tags:
+        - ping
+      description: |
+        Make sure authentication is working properly
+      operationId: ping
+      responses:
+        200:
+          description: Success
+
   /songs/{songID}/completeAudioReplacement:
     x-swagger-router-controller: songs
     post:
+      security:
+        - api_key: []
       tags:
         - songs
       description: |
@@ -48,6 +77,8 @@ paths:
   /songs/{songID}/requestAudioReplacement:
     x-swagger-router-controller: songs
     post:
+      security:
+        - api_key: []
       tags:
       - songs
       description: |
@@ -83,6 +114,8 @@ paths:
   /songRequests/search:
     x-swagger-router-controller: songRequests
     get:
+      security:
+        - api_key: []
       tags:
         - songRequests
       description: |
@@ -106,6 +139,8 @@ paths:
   /songRequests/complete/{spotifyID}:
     x-swagger-router-controller: songRequests
     post:
+      security:
+        - api_key: []
       tags:
         - songRequests
       description: |
@@ -148,6 +183,8 @@ paths:
   /songRequests/{spotifyID}:
     x-swagger-router-controller: songRequests
     post:
+      security:
+        - api_key: []
       tags:
         - songRequests
       operationId: getOrCreateSongRequest
