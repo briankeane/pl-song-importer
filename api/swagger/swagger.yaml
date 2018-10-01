@@ -201,6 +201,27 @@ paths:
           description: Error
           schema:
             $ref: "./deps/swagger-defs/commonDefinitions.yaml#/ErrorResponse"
+    delete:
+      security:
+        - api_key: []
+      tags:
+        - songRequests
+      operationId: removeMatchingSpotifyID
+      parameters:
+        - name: spotifyID
+          in: path
+          description: The spotify id of the desired song
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: './deps/swagger-defs/commonDefinitions.yaml#/SongRequest'
+        default:
+          description: Error
+          schema:
+            $ref: "./deps/swagger-defs/commonDefinitions.yaml#/ErrorResponse"
 
 definitions:
   AudioReplacementRequest:

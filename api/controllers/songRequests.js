@@ -39,10 +39,17 @@ function getMatchingQuery(req, res, next) {
     .catch(err => res.status(500).send(err))
 }
 
+function removeMatchingSpotifyID(req, res, next) {
+  lib.removeSongRequestMatchingSpotifyID(req.swagger.params.spotifyID.value)
+    .then(results => res.status(200).json(results))
+    .catch(err => res.status(500).send(err))
+}
+
 function handleError(res, err) {
   console.log(err);
   return res.status(err.statusCode).json({ message: err.message })
 }
+
 
 
 module.exports = {
@@ -50,5 +57,6 @@ module.exports = {
   checkBucket,
   completeSongAcquisition,
   getSpotifyIDs,
-  getMatchingQuery
+  getMatchingQuery,
+  removeMatchingSpotifyID
 }
