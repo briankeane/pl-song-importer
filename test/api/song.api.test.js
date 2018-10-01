@@ -47,6 +47,7 @@ describe('song API endpoints', function() {
             console.log(err, res.body)
             done(err);
           } else {
+            console.log(res.body)
             expect(res.body.song.id).to.equal(createdSong.id);
             expect(res.body.status).to.equal("The song has been processed");
             done()
