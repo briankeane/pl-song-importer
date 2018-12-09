@@ -46,6 +46,34 @@ paths:
         200:
           description: Success
 
+  /songs/batch:
+    x-swagger-router-controller: songs
+    get:
+      security:
+        - api_key: []
+      tags:
+        - songs
+      description: |
+        Gets a batch of songs from their ids.
+      operationId: getBatch
+      parameters:
+        - name: songIDs
+          in: query
+          description: The ID of the song
+          required: true
+          type: array
+          items:
+            type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/AudioReplacementRequest"
+        default:
+          description: Error
+          schema:
+            $ref: "./deps/swagger-defs/commonDefinitions.yaml#/ErrorResponse"
+
   /songs/{songID}/completeAudioReplacement:
     x-swagger-router-controller: songs
     post:
@@ -131,7 +159,7 @@ paths:
         200:
           description: Success
           schema:
-            $ref: "./deps/swagger-defs/commonDefinitions.yaml#/SongRequests"
+            $ref: "./deps/swagger-defs/commonDefinitions.yaml#/Songs"
         default:
           description: Error
           schema:
